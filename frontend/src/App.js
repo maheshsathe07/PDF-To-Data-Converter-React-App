@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ExtractData from "./components/ExtractData";
 import ExtractSchema from "./components/ExtractSchema";
 import GenerateInsights from "./components/GenerateInsights";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <h1>PDF Data Extraction App</h1>
+        <Navbar/>
         <Routes>
           <Route path="/extract-data" element={<ExtractData />} />
           <Route path="/extract-schema" element={<ExtractSchema />} />
