@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import './ExtractSchema.css';  // For custom styling
 
 function ExtractSchema() {
   const [file, setFile] = useState(null);
@@ -30,17 +31,31 @@ function ExtractSchema() {
     }
   };
 
+  const copyToClipboard = () => {
+    if (result) {
+      navigator.clipboard.writeText(JSON.stringify(result, null, 2));
+      alert("Copied to clipboard!");
+    }
+  };
+
   return (
-    <div>
+    <div className="extract-schema-container my-3">
       <h2>Extract Schema from PDF</h2>
       <form onSubmit={handleSubmit}>
-        <input type="file" accept="application/pdf" onChange={handleFileChange} />
-        <button type="submit">Submit</button>
+        <input 
+          type="file" 
+          accept="application/pdf" 
+          onChange={handleFileChange} 
+          className="file-input"
+        />
+        <button type="submit" className="submit-button">Submit</button>
       </form>
+
       {result && (
-        <div>
+        <div className="result-container">
           <h3>Extracted Schema Data</h3>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
+          <pre className="json-output">{JSON.stringify(result, null, 2)}</pre>
+          <button className="copy-button" onClick={copyToClipboard}>Copy to Clipboard</button>
         </div>
       )}
     </div>
