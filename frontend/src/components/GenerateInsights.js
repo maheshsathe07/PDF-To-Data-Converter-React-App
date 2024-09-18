@@ -1,10 +1,13 @@
+
 import React, { useState } from "react";
 import axios from "axios";
+import './GenerateInsights.css'; 
 
 function GenerateInsights() {
   const [file, setFile] = useState(null);
   const [query, setQuery] = useState("");
   const [result, setResult] = useState(null);
+  const [chartImage, setChartImage] = useState(""); // New state for image URL
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -31,28 +34,47 @@ function GenerateInsights() {
         }
       );
       setResult(response.data);
+
+      // Fetch the chart image
+      const imageUrl = `${process.env.REACT_APP_FLASK_API_URL}/exports/charts/temp_chart.png`;
+      console.log(imageUrl)
+      setChartImage(imageUrl);
     } catch (error) {
       console.error("Error generating insights:", error);
     }
   };
 
   return (
-    <div>
+    <div className="generate-insights-container">
       <h2>Generate Insights from CSV</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept="text/csv" onChange={handleFileChange} />
-        <input
-          type="text"
-          placeholder="Enter your query"
-          value={query}
-          onChange={handleQueryChange}
+      <form onSubmit={handleSubmit} className="insights-form">
+        <input 
+          type="file" 
+          accept="text/csv" 
+          onChange={handleFileChange} 
+          className="file-input"
         />
-        <button type="submit">Submit</button>
+        <input 
+          type="text" 
+          placeholder="Enter your query" 
+          value={query} 
+          onChange={handleQueryChange} 
+          className="query-input"
+        />
+        <button type="submit" className="submit-button">Submit</button>
       </form>
+
       {result && (
-        <div>
+        <div className="result-container">
           <h3>Generated Insights</h3>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
+          <pre className="json-output">{JSON.stringify(result, null, 2)}</pre>
+        </div>
+      )}
+
+      {chartImage && (
+        <div className="chart-container">
+          <h3>Generated Chart</h3>
+          <img src={chartImage} alt="Generated Chart" className="chart-image"/>
         </div>
       )}
     </div>
