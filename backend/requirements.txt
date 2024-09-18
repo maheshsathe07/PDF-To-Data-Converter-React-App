@@ -1,0 +1,11 @@
+Flask
+python-dotenv
+PyPDF2
+google-generativeai
+langchain
+langchain-google-genai
+langchain-core
+pydantic
+pandas
+pandasai
+matplotlib
