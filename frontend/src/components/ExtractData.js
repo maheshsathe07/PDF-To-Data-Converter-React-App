@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./ExtractData.css"; // Custom CSS for styling
 
 function ExtractData() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [copySuccess, setCopySuccess] = useState("");
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -25,22 +27,38 @@ function ExtractData() {
         }
       );
       setResult(response.data);
+      setCopySuccess(""); // Reset copy success message
     } catch (error) {
       console.error("Error extracting data:", error);
     }
   };
 
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(JSON.stringify(result, null, 2));
+    setCopySuccess("Copied to clipboard!");
+  };
+
   return (
-    <div>
+    <div className="extract-data-container">
       <h2>Extract Data from PDF</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept="application/pdf" onChange={handleFileChange} />
-        <button type="submit">Submit</button>
+      <form onSubmit={handleSubmit} className="extract-form">
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={handleFileChange}
+          className="file-input"
+        />
+        <button type="submit" className="submit-button">Submit</button>
       </form>
+
       {result && (
-        <div>
+        <div className="result-container">
           <h3>Extracted Data</h3>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
+          <pre className="json-output">{JSON.stringify(result, null, 2)}</pre>
+          <button className="copy-button" onClick={copyToClipboard}>
+            Copy to Clipboard
+          </button>
+          {copySuccess && <span className="copy-success">{copySuccess}</span>}
         </div>
       )}
     </div>
