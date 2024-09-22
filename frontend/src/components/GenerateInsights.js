@@ -36,7 +36,9 @@ function GenerateInsights() {
       setResult(response.data);
 
       // Fetch the chart image
-      const imageUrl = `${process.env.REACT_APP_FLASK_API_URL}/exports/charts/temp_chart.png`;
+      // const imageUrl = `${process.env.REACT_APP_FLASK_API_URL}/exports/charts/temp_chart.png`;
+
+      const imageUrl = `${process.env.REACT_APP_FLASK_API_URL}/exports/charts/temp_chart.png?timestamp=${new Date().getTime()}`;
       console.log(imageUrl)
       setChartImage(imageUrl);
     } catch (error) {
