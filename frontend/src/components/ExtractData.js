@@ -26,15 +26,23 @@ function ExtractData() {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      setResult(response.data);
+      // Clean the response data
+      const cleanedData = cleanResponseString(response.data);
+      setResult(cleanedData);
       setCopySuccess(""); // Reset copy success message
     } catch (error) {
       console.error("Error extracting data:", error);
+      setResult("An error occurred while extracting data.");
     }
   };
 
+  const cleanResponseString = (responseString) => {
+    // Remove markdown code block syntax and any leading/trailing whitespace
+    return responseString.replace(/```\s*JSON\s*|\s*```/g, '').trim();
+  };
+
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(result, null, 2));
+    navigator.clipboard.writeText(result);
     setCopySuccess("Copied to clipboard!");
   };
 
@@ -54,7 +62,7 @@ function ExtractData() {
       {result && (
         <div className="result-container">
           <h3>Extracted Data</h3>
-          <pre className="json-output">{JSON.stringify(result, null, 2)}</pre>
+          <pre className="json-output">{result}</pre>
           <button className="copy-button" onClick={copyToClipboard}>
             Copy to Clipboard
           </button>
