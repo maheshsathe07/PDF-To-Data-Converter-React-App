@@ -35,9 +35,6 @@ function GenerateInsights() {
       );
       setResult(response.data);
 
-      // Fetch the chart image
-      // const imageUrl = `${process.env.REACT_APP_FLASK_API_URL}/exports/charts/temp_chart.png`;
-
       const imageUrl = `${process.env.REACT_APP_FLASK_API_URL}/exports/charts/temp_chart.png?timestamp=${new Date().getTime()}`;
       console.log(imageUrl)
       setChartImage(imageUrl);
@@ -66,15 +63,15 @@ function GenerateInsights() {
         <button type="submit" className="submit-button">Submit</button>
       </form>
 
-      {result && (
+      {/* {result && (
         <div className="result-container">
           <h3>Generated Insights</h3>
           <pre className="json-output">{JSON.stringify(result, null, 2)}</pre>
         </div>
-      )}
+      )} */}
 
       {chartImage && (
-        <div className="chart-container">
+        <div className="chart-container my-3">
           <h3>Generated Chart</h3>
           <img src={chartImage} alt="Generated Chart" className="chart-image"/>
         </div>
