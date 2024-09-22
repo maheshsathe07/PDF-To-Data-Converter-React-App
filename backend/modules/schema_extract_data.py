@@ -65,6 +65,7 @@ class SchemaExtractData:
         output = self.llm.invoke(messages)
         try:
             response = pydantic_parser.parse(output.content)
+            # print(response)
             return response.json()
         except Exception as e:
             return {"error": str(e), "output": output.content}
