@@ -45,6 +45,33 @@ function ExtractSchema() {
     alert("Copied to clipboard!");
   };
 
+  const jsonToCsv = (json) => {
+    const csvRows = [];
+    const headers = Object.keys(json[0]);
+    csvRows.push(headers.join(','));
+
+    for (const row of json) {
+      csvRows.push(headers.map(header => JSON.stringify(row[header], (key, value) => value === null ? '' : value)).join(','));
+    }
+
+    return csvRows.join('\n');
+  };
+
+  const downloadCsv = () => {
+    if (!result) return;
+
+    const csvData = jsonToCsv([result]); // Pass an array containing the result
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'extracted_schema.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const renderError = () => {
     if (!error) return null;
 
@@ -52,7 +79,6 @@ function ExtractSchema() {
     let parsedOutput = error.output;
 
     try {
-      // Try to parse the JSON in the error message
       const match = parsedError.match(/Failed to parse MySchema from completion (.*?)\. Got:/);
       if (match) {
         const jsonStr = match[1];
@@ -64,7 +90,6 @@ function ExtractSchema() {
     }
 
     try {
-      // Try to parse the JSON in the output
       const match = parsedOutput.match(/```json\n([\s\S]*?)\n```/);
       if (match) {
         const jsonStr = match[1];
@@ -97,6 +122,9 @@ function ExtractSchema() {
           <pre className="json-output">{JSON.stringify(result, null, 2)}</pre>
           <button className="copy-button" onClick={() => copyToClipboard(JSON.stringify(result, null, 2))}>
             Copy to Clipboard
+          </button>
+          <button className="download-button" onClick={downloadCsv} style={{ marginTop: "10px", padding: "10px", backgroundColor: "#4CAF50", color: "white" }}>
+            Download CSV
           </button>
         </>
       );
