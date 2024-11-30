@@ -2,8 +2,8 @@ import os
 from flask import Flask, request, jsonify, send_from_directory
 from modules.extract_data import ExtractData
 from modules.schema_extract_data import SchemaExtractData  # Ensure correct import
-from backend.modules.generate_insights_csv import GenerateVisualInsights
-from backend.modules.generate_insights_sql import GenerateSQLInsights
+from modules.generate_insights_csv import GenerateVisualInsights
+from modules.generate_insights_sql import GenerateSQLInsights
 from flask_cors import CORS
 import base64
 import io
